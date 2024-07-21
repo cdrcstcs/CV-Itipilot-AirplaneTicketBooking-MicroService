@@ -1,0 +1,37 @@
+package com.dailycodework.lakesidehotel.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.math.BigDecimal;
+import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+public class Airplane {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String airplaneType;
+
+    private BigDecimal ticketPrice;
+
+    @Lob
+    private Blob photo;
+
+    @OneToMany(mappedBy = "airplane", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Seat> seats = new ArrayList<>();
+
+    public void addSeat(Seat seat) {
+        seats.add(seat);
+        seat.setAirplane(this); // Set the relationship on both sides
+        String seatCode = RandomStringUtils.randomNumeric(10);
+        seat.setSeatConfirmationCode(seatCode);
+    }
+}

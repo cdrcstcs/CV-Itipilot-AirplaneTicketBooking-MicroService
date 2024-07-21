@@ -7,17 +7,9 @@ import com.dailycodework.lakesidehotel.service.IRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 import static org.springframework.http.HttpStatus.FOUND;
-
-/**
- * @author Simpson Alfred
- */
-
 @RestController
 @RequestMapping("/roles")
 @RequiredArgsConstructor

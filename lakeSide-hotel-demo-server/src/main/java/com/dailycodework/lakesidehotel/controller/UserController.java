@@ -1,22 +1,13 @@
 package com.dailycodework.lakesidehotel.controller;
-
 import com.dailycodework.lakesidehotel.model.User;
 import com.dailycodework.lakesidehotel.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
-/**
- * @author Simpson Alfred
- */
-
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor

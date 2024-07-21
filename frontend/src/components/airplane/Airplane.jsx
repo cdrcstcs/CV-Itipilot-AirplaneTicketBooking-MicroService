@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { getAllRooms } from "../utils/ApiFunctions"
-import RoomCard from "./RoomCard"
+import RoomCard from "./AirplaneCard"
 import { Col, Container, Row } from "react-bootstrap"
-import RoomFilter from "../common/RoomFilter"
-import RoomPaginator from "../common/RoomPaginator"
+import RoomFilter from "../common/AirplaneFilter"
+import RoomPaginator from "../common/AirplanePaginator"
 
 const Room = () => {
 	const [data, setData] = useState([])
