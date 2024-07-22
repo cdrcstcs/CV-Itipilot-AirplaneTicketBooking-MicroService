@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface ISeatService {
 
-    void cancelSeat(Long SeatId);
+    void cancelSeat(Long seatId);
 
     List<Seat> getAllSeatsByAirplaneId(Long airplaneId);
 
-    String saveSeat(Long airplaneId, Seat SeatRequest);
+    String saveSeat(Long airplaneId, Seat seatRequest);
 
     Seat findBySeatConfirmationCode(String confirmationCode);
 

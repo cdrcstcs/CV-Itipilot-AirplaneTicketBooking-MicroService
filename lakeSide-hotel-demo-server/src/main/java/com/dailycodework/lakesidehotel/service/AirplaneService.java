@@ -80,7 +80,7 @@ public class AirplaneService implements IAirplaneService {
         if (ticketPrice != null) {
             airplane.setTicketPrice(ticketPrice);
         }
-        if (capacity != 0){
+        if (capacity > 0){
             airplane.setCapacity(capacity);
         }
         if (departureDate != null && landingDate != null){

@@ -28,8 +28,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/airplanes")
 public class AirplaneController {
-    private final IAirplaneService AirplaneService;
-    private final ISeatService SeatService;
+    private final IAirplaneService airplaneService;
+    private final ISeatService seatService;
     @PostMapping("/add/new-airplane")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<AirplaneResponse> addNewAirplane(
@@ -39,20 +39,28 @@ public class AirplaneController {
             @RequestParam("capacity") int capacity,
             @RequestParam("departureDate") LocalDate departurDate,
             @RequestParam("landingDate") LocalDate landingDate) throws SQLException, IOException {
-        Airplane savedAirplane = AirplaneService.addNewAirplane(photo, airplaneType, ticketPrice, capacity, departurDate, landingDate);
-        AirplaneResponse response = new AirplaneResponse(savedAirplane.getId(), savedAirplane.getAirplaneType(),savedAirplane.getTicketPrice(),savedAirplane.getPhoto().getBytes(0,64),null, savedAirplane.getCapacity(),savedAirplane.getDepartureDate(),savedAirplane.getLandingDate());
+        Airplane savedAirplane = airplaneService.addNewAirplane(photo, airplaneType, ticketPrice, capacity, departurDate, landingDate);
+        AirplaneResponse response = new AirplaneResponse(
+                                                        savedAirplane.getId(), 
+                                                        savedAirplane.getAirplaneType(),
+                                                        savedAirplane.getTicketPrice(),
+                                                        savedAirplane.getPhoto().getBytes(0,64),
+                                                        null,
+                                                        savedAirplane.getCapacity(),
+                                                        savedAirplane.getDepartureDate(),
+                                                        savedAirplane.getLandingDate());
         return ResponseEntity.ok(response);
     }
     @GetMapping("/airplane/types")
     public List<String> getAirplaneTypes() {
-        return AirplaneService.getAllAirplaneTypes();
+        return airplaneService.getAllAirplaneTypes();
     }
     @GetMapping("/all-airplanes")
     public ResponseEntity<List<AirplaneResponse>> getAllAirplanes() throws SQLException {
-        List<Airplane> airplanes = AirplaneService.getAllAirplanes();
+        List<Airplane> airplanes = airplaneService.getAllAirplanes();
         List<AirplaneResponse> airplaneResponses = new ArrayList<>();
         for (Airplane airplane : airplanes) {
-            byte[] photoBytes = AirplaneService.getAirplanePhotoByAirplaneId(airplane.getId());
+            byte[] photoBytes = airplaneService.getAirplanePhotoByAirplaneId(airplane.getId());
             if (photoBytes != null && photoBytes.length > 0) {
                 String base64Photo = Base64.encodeBase64String(photoBytes);
                 AirplaneResponse airplaneResponse = getAirplaneResponse(airplane);
@@ -65,7 +73,7 @@ public class AirplaneController {
     @DeleteMapping("/delete/airplane/{airplaneId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteAirplane(@PathVariable Long airplaneId){
-        AirplaneService.deleteAirplane(airplaneId);
+        airplaneService.deleteAirplane(airplaneId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @PutMapping("/update/{airplaneId}")
@@ -78,16 +86,16 @@ public class AirplaneController {
                                                    @RequestParam(required = false) LocalDate landingDate,
                                                    @RequestParam(required = false) MultipartFile photo) throws SQLException, IOException {
         byte[] photoBytes = photo != null && !photo.isEmpty() ?
-                photo.getBytes() : AirplaneService.getAirplanePhotoByAirplaneId(airplaneId);
+                photo.getBytes() : airplaneService.getAirplanePhotoByAirplaneId(airplaneId);
         Blob photoBlob = photoBytes != null && photoBytes.length >0 ? new SerialBlob(photoBytes): null;
-        Airplane theAirplane = AirplaneService.updateAirplane(airplaneId, airplaneType, ticketPrice, photoBytes, capacity, departurDate, landingDate);
+        Airplane theAirplane = airplaneService.updateAirplane(airplaneId, airplaneType, ticketPrice, photoBytes, capacity, departurDate, landingDate);
         theAirplane.setPhoto(photoBlob);
         AirplaneResponse airplaneResponse = getAirplaneResponse(theAirplane);
         return ResponseEntity.ok(airplaneResponse);
     }
     @GetMapping("/airplane/{airplaneId}")
     public ResponseEntity<Optional<AirplaneResponse>> getAirplaneById(@PathVariable Long airplaneId){
-        Optional<Airplane> theAirplane = AirplaneService.getAirplaneById(airplaneId);
+        Optional<Airplane> theAirplane = airplaneService.getAirplaneById(airplaneId);
         return theAirplane.map(airplane -> {
             AirplaneResponse airplaneResponse = getAirplaneResponse(airplane);
             return  ResponseEntity.ok(Optional.of(airplaneResponse));
@@ -99,10 +107,10 @@ public class AirplaneController {
             @RequestParam("landingDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate landingDate,
             @RequestParam("airplaneType") String airplaneType
             ) throws SQLException {
-        List<Airplane> availableAirplanes = AirplaneService.getAvailableAirplanes(departureDate, landingDate, airplaneType);
+        List<Airplane> availableAirplanes = airplaneService.getAvailableAirplanes(departureDate, landingDate, airplaneType);
         List<AirplaneResponse> airplaneResponses = new ArrayList<>();
         for (Airplane airplane : availableAirplanes){
-            byte[] photoBytes = AirplaneService.getAirplanePhotoByAirplaneId(airplane.getId());
+            byte[] photoBytes = airplaneService.getAirplanePhotoByAirplaneId(airplane.getId());
             if (photoBytes != null && photoBytes.length > 0){
                 String photoBase64 = Base64.encodeBase64String(photoBytes);
                 AirplaneResponse airplaneResponse = getAirplaneResponse(airplane);
@@ -153,8 +161,8 @@ public class AirplaneController {
         );
     }
     
-    private List<Seat> getAllSeatsByAirplaneId(Long AirplaneId) {
-        return SeatService.getAllSeatsByAirplaneId(AirplaneId);
+    private List<Seat> getAllSeatsByAirplaneId(Long airplaneId) {
+        return seatService.getAllSeatsByAirplaneId(airplaneId);
     }
 
 }

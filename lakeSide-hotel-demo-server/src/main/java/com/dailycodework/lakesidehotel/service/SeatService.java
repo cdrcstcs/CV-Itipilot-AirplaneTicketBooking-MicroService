@@ -10,42 +10,42 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SeatService implements ISeatService {
 
-    private final SeatRepository SeatRepository;
+    private final SeatRepository seatRepository;
     private final IAirplaneService airplaneService;
 
     @Override
     public List<Seat> getAllSeats() {
-        return SeatRepository.findAll();
+        return seatRepository.findAll();
     }
 
     @Override
     public List<Seat> getSeatsByUserEmail(String email) {
-        return SeatRepository.findByGuestEmail(email);
+        return seatRepository.findByGuestEmail(email);
     }
 
     @Override
-    public void cancelSeat(Long SeatId) {
-        SeatRepository.deleteById(SeatId);
+    public void cancelSeat(Long seatId) {
+        seatRepository.deleteById(seatId);
     }
 
     @Override
     public List<Seat> getAllSeatsByAirplaneId(Long airplaneId) {
-        return SeatRepository.findByAirplaneId(airplaneId);
+        return seatRepository.findByAirplaneId(airplaneId);
     }
 
     @Override
-    public String saveSeat(Long airplaneId, Seat SeatRequest) {
+    public String saveSeat(Long airplaneId, Seat seatRequest) {
         Airplane airplane = airplaneService.getAirplaneById(airplaneId).orElseThrow(() -> new ResourceNotFoundException("Airplane not found with id: " + airplaneId));
-        SeatRequest.setAirplane(airplane);
-        SeatRepository.save(SeatRequest);
-        SeatRequest.setDepartureDate(airplane.getDepartureDate());
-        SeatRequest.setLandingDate(airplane.getLandingDate());
-        airplane.addSeat(SeatRequest);
-        return SeatRequest.getSeatConfirmationCode();
+        seatRequest.setAirplane(airplane);
+        seatRepository.save(seatRequest);
+        seatRequest.setDepartureDate(airplane.getDepartureDate());
+        seatRequest.setLandingDate(airplane.getLandingDate());
+        airplane.addSeat(seatRequest);
+        return seatRequest.getSeatConfirmationCode();
     }
 
     @Override
     public Seat findBySeatConfirmationCode(String confirmationCode) {
-        return SeatRepository.findBySeatConfirmationCode(confirmationCode).orElseThrow(() -> new ResourceNotFoundException("No Seat found with confirmation code: " + confirmationCode));
+        return seatRepository.findBySeatConfirmationCode(confirmationCode).orElseThrow(() -> new ResourceNotFoundException("No Seat found with confirmation code: " + confirmationCode));
     }
 }
