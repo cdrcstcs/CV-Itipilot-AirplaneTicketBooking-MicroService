@@ -1,49 +1,45 @@
 import React, { useState } from "react"
-import { addRoom } from "../utils/ApiFunctions"
-import RoomTypeSelector from "../common/AirplaneTypeSelector"
+import { addAirplane } from "../utils/ApiFunctions"
+import AirplaneTypeSelector from "../common/AirplaneTypeSelector"
 import { Link } from "react-router-dom"
 
-const AddRoom = () => {
-	const [newRoom, setNewRoom] = useState({
+const AddAirplane = () => {
+	const [newAirplane, setNewAirplane] = useState({
 		photo: null,
-		roomType: "",
-		roomPrice: ""
+		airplaneType: "",
+		ticketPrice: ""
 	})
-
 	const [successMessage, setSuccessMessage] = useState("")
 	const [errorMessage, setErrorMessage] = useState("")
 	const [imagePreview, setImagePreview] = useState("")
-
-	const handleRoomInputChange = (e) => {
+	const handleAirplaneInputChange = (e) => {
 		const name = e.target.name
 		let value = e.target.value
-		if (name === "roomPrice") {
+		if (name === "ticketPrice") {
 			if (!isNaN(value)) {
 				value = parseInt(value)
 			} else {
 				value = ""
 			}
 		}
-		setNewRoom({ ...newRoom, [name]: value })
+		setNewAirplane({ ...newAirplane, [name]: value })
 	}
-
 	const handleImageChange = (e) => {
 		const selectedImage = e.target.files[0]
-		setNewRoom({ ...newRoom, photo: selectedImage })
+		setNewAirplane({ ...newAirplane, photo: selectedImage })
 		setImagePreview(URL.createObjectURL(selectedImage))
 	}
-
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const success = await addRoom(newRoom.photo, newRoom.roomType, newRoom.roomPrice)
+			const success = await addAirplane(newAirplane.photo, newAirplane.airplaneType, newAirplane.ticketPrice)
 			if (success !== undefined) {
-				setSuccessMessage("A new room was  added successfully !")
-				setNewRoom({ photo: null, roomType: "", roomPrice: "" })
+				setSuccessMessage("A new Airplane was  added successfully !")
+				setNewAirplane({ photo: null, airplaneType: "", ticketPrice: "" })
 				setImagePreview("")
 				setErrorMessage("")
 			} else {
-				setErrorMessage("Error adding new room")
+				setErrorMessage("Error adding new Airplane")
 			}
 		} catch (error) {
 			setErrorMessage(error.message)
@@ -53,49 +49,46 @@ const AddRoom = () => {
 			setErrorMessage("")
 		}, 3000)
 	}
-
 	return (
 		<>
 			<section className="container mt-5 mb-5">
 				<div className="row justify-content-center">
 					<div className="col-md-8 col-lg-6">
-						<h2 className="mt-5 mb-2">Add a New Room</h2>
+						<h2 className="mt-5 mb-2">Add a New Airplane</h2>
 						{successMessage && (
 							<div className="alert alert-success fade show"> {successMessage}</div>
 						)}
-
 						{errorMessage && <div className="alert alert-danger fade show"> {errorMessage}</div>}
-
 						<form onSubmit={handleSubmit}>
 							<div className="mb-3">
-								<label htmlFor="roomType" className="form-label">
-									Room Type
+								<label htmlFor="airplaneType" className="form-label">
+									Airplane Brand
 								</label>
 								<div>
-									<RoomTypeSelector
-										handleRoomInputChange={handleRoomInputChange}
-										newRoom={newRoom}
+									<AirplaneTypeSelector
+										handleAirplaneInputChange={handleAirplaneInputChange}
+										newAirplane={newAirplane}
 									/>
 								</div>
 							</div>
 							<div className="mb-3">
-								<label htmlFor="roomPrice" className="form-label">
-									Room Price
+								<label htmlFor="ticketPrice" className="form-label">
+									Ticket Price
 								</label>
 								<input
 									required
 									type="number"
 									className="form-control"
-									id="roomPrice"
-									name="roomPrice"
-									value={newRoom.roomPrice}
-									onChange={handleRoomInputChange}
+									id="ticketPrice"
+									name="ticketPrice"
+									value={newAirplane.ticketPrice}
+									onChange={handleAirplaneInputChange}
 								/>
 							</div>
 
 							<div className="mb-3">
 								<label htmlFor="photo" className="form-label">
-									Room Photo
+									Airplane Photo
 								</label>
 								<input
 									required
@@ -108,17 +101,17 @@ const AddRoom = () => {
 								{imagePreview && (
 									<img
 										src={imagePreview}
-										alt="Preview  room photo"
+										alt="Preview  Airplane photo"
 										style={{ maxWidth: "400px", maxHeight: "400px" }}
 										className="mb-3"></img>
 								)}
 							</div>
 							<div className="d-grid gap-2 d-md-flex mt-2">
-								<Link to={"/existing-rooms"} className="btn btn-outline-info">
-									Existing rooms
+								<Link to={"/existing-airplanes"} className="btn btn-outline-info">
+									Existing Airplanes
 								</Link>
 								<button type="submit" className="btn btn-outline-primary ml-5">
-									Save Room
+									Save Airplane
 								</button>
 							</div>
 						</form>
@@ -128,5 +121,4 @@ const AddRoom = () => {
 		</>
 	)
 }
-
-export default AddRoom
+export default AddAirplane

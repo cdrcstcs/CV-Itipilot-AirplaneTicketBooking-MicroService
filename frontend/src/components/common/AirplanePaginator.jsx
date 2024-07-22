@@ -1,6 +1,6 @@
 import React from "react"
 
-const RoomPaginator = ({ currentPage, totalPages, onPageChange }) => {
+const AirplanePaginator = ({ currentPage, totalPages, onPageChange }) => {
 	const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
 	return (
 		<nav aria-label="Page navigation">
@@ -19,4 +19,4 @@ const RoomPaginator = ({ currentPage, totalPages, onPageChange }) => {
 	)
 }
 
-export default RoomPaginator
+export default AirplanePaginator

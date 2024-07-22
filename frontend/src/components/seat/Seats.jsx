@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react"
-import { cancelBooking, getAllBookings } from "../utils/ApiFunctions"
+import { cancelSeat, getAllSeats } from "../utils/ApiFunctions"
 import Header from "../common/Header"
-import BookingsTable from "./SeatsTable"
+import SeatsTable from "./SeatsTable"
 
-const Bookings = () => {
-	const [bookingInfo, setBookingInfo] = useState([])
+const Seats = () => {
+	const [seatInfo, setSeatInfo] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
 	const [error, setError] = useState("")
-
 	useEffect(() => {
 		setTimeout(() => {
-			getAllBookings()
+			getAllSeats()
 				.then((data) => {
-					setBookingInfo(data)
+					setSeatInfo(data)
 					setIsLoading(false)
 				})
 				.catch((error) => {
@@ -21,31 +20,28 @@ const Bookings = () => {
 				})
 		}, 1000)
 	}, [])
-
-	const handleBookingCancellation = async (bookingId) => {
+	const handleSeatCancellation = async (SeatId) => {
 		try {
-			await cancelBooking(bookingId)
-			const data = await getAllBookings()
-			setBookingInfo(data)
+			await cancelSeat(SeatId)
+			const data = await getAllSeats()
+			setSeatInfo(data)
 		} catch (error) {
 			setError(error.message)
 		}
 	}
-
 	return (
 		<section style={{ backgroundColor: "whitesmoke" }}>
-			<Header title={"Existing Bookings"} />
+			<Header title={"Existing Seats"} />
 			{error && <div className="text-danger">{error}</div>}
 			{isLoading ? (
-				<div>Loading existing bookings</div>
+				<div>Loading existing Seats</div>
 			) : (
-				<BookingsTable
-					bookingInfo={bookingInfo}
-					handleBookingCancellation={handleBookingCancellation}
+				<SeatsTable
+					seatInfo={seatInfo}
+					handleSeatCancellation={handleSeatCancellation}
 				/>
 			)}
 		</section>
 	)
 }
-
-export default Bookings
+export default Seats

@@ -89,8 +89,11 @@ public class AirplaneController {
     }
     @GetMapping("/available-airplanes")
     public ResponseEntity<List<AirplaneResponse>> getAvailableAirplanes(
-            @RequestParam("airplaneType") String airplaneType) throws SQLException {
-        List<Airplane> availableAirplanes = AirplaneService.getAvailableAirplanesByType(airplaneType);
+            @RequestParam("departureDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate departureDate,
+            @RequestParam("landingDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate landingDate,
+            @RequestParam("airplaneType") String airplaneType
+            ) throws SQLException {
+        List<Airplane> availableAirplanes = AirplaneService.getAvailableAirplanes(departureDate, landingDate, airplaneType);
         List<AirplaneResponse> airplaneResponses = new ArrayList<>();
         for (Airplane airplane : availableAirplanes){
             byte[] photoBytes = AirplaneService.getAirplanePhotoByAirplaneId(airplane.getId());

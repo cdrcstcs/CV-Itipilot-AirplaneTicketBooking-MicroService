@@ -1,12 +1,12 @@
 import React from "react"
-import Room from "./Airplane"
+import Airplane from "./Airplane"
 
-const RoomListing = () => {
+const AirplaneListing = () => {
 	return (
 		<section className="bg-light p-2 mb-5 mt-5 shadow">
-			<Room />
+			<Airplane />
 		</section>
 	)
 }
 
-export default RoomListing
+export default AirplaneListing

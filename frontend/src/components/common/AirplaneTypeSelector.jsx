@@ -1,64 +1,60 @@
 import React, { useState, useEffect } from "react"
-import { getRoomTypes } from "../utils/ApiFunctions"
+import { getAirplaneTypes } from "../utils/ApiFunctions"
 
-const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
-	const [roomTypes, setRoomTypes] = useState([""])
-	const [showNewRoomTypeInput, setShowNewRoomTypeInput] = useState(false)
-	const [newRoomType, setNewRoomType] = useState("")
-
+const AirplaneTypeSelector = ({ handleAirplaneInputChange, newAirplane }) => {
+	const [airplaneTypes, setAirplaneTypes] = useState([""])
+	const [showNewAirplaneTypeInput, setShowNewAirplaneTypeInput] = useState(false)
+	const [newAirplaneType, setNewAirplaneType] = useState("")
 	useEffect(() => {
-		getRoomTypes().then((data) => {
-			setRoomTypes(data)
+		getAirplaneTypes().then((data) => {
+			setAirplaneTypes(data)
 		})
 	}, [])
-
-	const handleNewRoomTypeInputChange = (e) => {
-		setNewRoomType(e.target.value)
+	const handleNewAirplaneTypeInputChange = (e) => {
+		setNewAirplaneType(e.target.value)
 	}
-
-	const handleAddNewRoomType = () => {
-		if (newRoomType !== "") {
-			setRoomTypes([...roomTypes, newRoomType])
-			setNewRoomType("")
-			setShowNewRoomTypeInput(false)
+	const handleAddNewAirplaneType = () => {
+		if (newAirplaneType !== "") {
+			setAirplaneTypes([...airplaneTypes, newAirplaneType])
+			setNewAirplaneType("")
+			setShowNewAirplaneTypeInput(false)
 		}
 	}
-
 	return (
 		<>
-			{roomTypes.length > 0 && (
+			{airplaneTypes.length > 0 && (
 				<div>
 					<select
 						required
 						className="form-select"
-						name="roomType"
+						name="airplaneType"
 						onChange={(e) => {
 							if (e.target.value === "Add New") {
-								setShowNewRoomTypeInput(true)
+								setShowNewAirplaneTypeInput(true)
 							} else {
-								handleRoomInputChange(e)
+								handleAirplaneInputChange(e)
 							}
 						}}
-						value={newRoom.roomType}>
-						<option value="">Select a room type</option>
+						value={newAirplane.AirplaneType}>
+						<option value="">Select a Airplane Brand</option>
 						<option value={"Add New"}>Add New</option>
-						{roomTypes.map((type, index) => (
+						{airplaneTypes.map((type, index) => (
 							<option key={index} value={type}>
 								{type}
 							</option>
 						))}
 					</select>
-					{showNewRoomTypeInput && (
+					{showNewAirplaneTypeInput && (
 						<div className="mt-2">
 							<div className="input-group">
 								<input
 									type="text"
 									className="form-control"
-									placeholder="Enter New Room Type"
-									value={newRoomType}
-									onChange={handleNewRoomTypeInputChange}
+									placeholder="Enter New Airplane Type"
+									value={newAirplaneType}
+									onChange={handleNewAirplaneTypeInputChange}
 								/>
-								<button className="btn btn-hotel" type="button" onClick={handleAddNewRoomType}>
+								<button className="btn btn-hotel" type="button" onClick={handleAddNewAirplaneType}>
 									Add
 								</button>
 							</div>
@@ -69,5 +65,4 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 		</>
 	)
 }
-
-export default RoomTypeSelector
+export default AirplaneTypeSelector

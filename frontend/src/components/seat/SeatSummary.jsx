@@ -3,81 +3,66 @@ import moment from "moment"
 import Button from "react-bootstrap/Button"
 import { useNavigate } from "react-router-dom"
 
-const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => {
-	const checkInDate = moment(booking.checkInDate)
-	const checkOutDate = moment(booking.checkOutDate)
-	const numberOfDays = checkOutDate.diff(checkInDate, "days")
-	const [isBookingConfirmed, setIsBookingConfirmed] = useState(false)
+const AirplaneSummary = ({ airplane, payment, isFormValid, onConfirm }) => {
+	const departureDate = moment(airplane.departureDate)
+	const landingDate = moment(airplane.landingDate)
+	const numberOfHours = landingDate.diff(departureDate, "hours")
+	const [isAirplaneConfirmed, setIsAirplaneConfirmed] = useState(false)
 	const [isProcessingPayment, setIsProcessingPayment] = useState(false)
 	const navigate = useNavigate()
-
-	const handleConfirmBooking = () => {
+	const handleConfirmAirplane = () => {
 		setIsProcessingPayment(true)
 		setTimeout(() => {
 			setIsProcessingPayment(false)
-			setIsBookingConfirmed(true)
+			setIsAirplaneConfirmed(true)
 			onConfirm()
 		}, 3000)
 	}
-
 	useEffect(() => {
-		if (isBookingConfirmed) {
-			navigate("/booking-success")
+		if (isAirplaneConfirmed) {
+			navigate("/airplane-success")
 		}
-	}, [isBookingConfirmed, navigate])
-
+	}, [isAirplaneConfirmed, navigate])
 	return (
 		<div className="row">
 			<div className="col-md-6"></div>
 			<div className="card card-body mt-5">
 				<h4 className="card-title hotel-color">Reservation Summary</h4>
 				<p>
-					Name: <strong>{booking.guestFullName}</strong>
+					Name: <strong>{airplane.guestFullName}</strong>
 				</p>
 				<p>
-					Email: <strong>{booking.guestEmail}</strong>
+					Email: <strong>{airplane.guestEmail}</strong>
 				</p>
 				<p>
-					Check-in Date: <strong>{moment(booking.checkInDate).format("MMM Do YYYY")}</strong>
+					Departure Date: <strong>{moment(airplane.departureDate).format("MMM Do YYYY")}</strong>
 				</p>
 				<p>
-					Check-out Date: <strong>{moment(booking.checkOutDate).format("MMM Do YYYY")}</strong>
+					Landing Date: <strong>{moment(airplane.landingDate).format("MMM Do YYYY")}</strong>
 				</p>
 				<p>
-					Number of Days Booked: <strong>{numberOfDays}</strong>
+					Number of Hours Booked: <strong>{numberOfHours}</strong>
 				</p>
-
-				<div>
-					<h5 className="hotel-color">Number of Guest</h5>
-					<strong>
-						Adult{booking.numOfAdults > 1 ? "s" : ""} : {booking.numOfAdults}
-					</strong>
-					<strong>
-						<p>Children : {booking.numOfChildren}</p>
-					</strong>
-				</div>
-
 				{payment > 0 ? (
 					<>
 						<p>
 							Total payment: <strong>${payment}</strong>
 						</p>
-
-						{isFormValid && !isBookingConfirmed ? (
-							<Button variant="success" onClick={handleConfirmBooking}>
+						{isFormValid && !isAirplaneConfirmed ? (
+							<Button variant="success" onClick={handleConfirmAirplane}>
 								{isProcessingPayment ? (
 									<>
 										<span
 											className="spinner-border spinner-border-sm mr-2"
 											role="status"
 											aria-hidden="true"></span>
-										Booking Confirmed, redirecting to payment...
+										Airplane Confirmed, redirecting to payment...
 									</>
 								) : (
-									"Confirm Booking & proceed to payment"
+									"Confirm Airplane & proceed to payment"
 								)}
 							</Button>
-						) : isBookingConfirmed ? (
+						) : isAirplaneConfirmed ? (
 							<div className="d-flex justify-content-center align-items-center">
 								<div className="spinner-border text-primary" role="status">
 									<span className="sr-only">Loading...</span>
@@ -86,11 +71,10 @@ const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => {
 						) : null}
 					</>
 				) : (
-					<p className="text-danger">Check-out date must be after check-in date.</p>
+					<p className="text-danger">Landing date must be after Departure date.</p>
 				)}
 			</div>
 		</div>
 	)
 }
-
-export default BookingSummary
+export default AirplaneSummary

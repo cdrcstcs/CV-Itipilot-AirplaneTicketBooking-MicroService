@@ -1,14 +1,10 @@
-import React, { useContext } from "react"
+import React from "react"
 import MainHeader from "../layout/MainHeader"
-import HotelService from "../common/AirplaneService"
-import Parallax from "../common/Parallax"
-import RoomCarousel from "../common/AirplaneCarousel"
-import RoomSearch from "../common/AirplaneSearch"
+import AirplaneCarousel from "../common/AirplaneCarousel"
+import AirplaneSearch from "../common/AirplaneSearch"
 import { useLocation } from "react-router-dom"
-import { useAuth } from "../auth/AuthProvider"
 const Home = () => {
 	const location = useLocation()
-
 	const message = location.state && location.state.message
 	const currentUser = localStorage.getItem("userId")
 	return (
@@ -19,13 +15,8 @@ const Home = () => {
 			)}
 			<MainHeader />
 			<div className="container">
-				<RoomSearch />
-				<RoomCarousel />
-				<Parallax />
-				<RoomCarousel />
-				<HotelService />
-				<Parallax />
-				<RoomCarousel />
+				<AirplaneSearch />
+				<AirplaneCarousel />
 			</div>
 		</section>
 	)

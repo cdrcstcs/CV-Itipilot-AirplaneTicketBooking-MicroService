@@ -2,67 +2,58 @@ import { parseISO } from "date-fns"
 import React, { useState, useEffect } from "react"
 import DateSlider from "../common/DateSlider"
 
-const BookingsTable = ({ bookingInfo, handleBookingCancellation }) => {
-	const [filteredBookings, setFilteredBookings] = useState(bookingInfo)
-
-	const filterBooknigs = (startDate, endDate) => {
-		let filtered = bookingInfo
+const SeatsTable = ({ seatInfo, handleSeatCancellation }) => {
+	const [filteredSeats, setFilteredSeats] = useState(seatInfo)
+	const filterSeats = (startDate, endDate) => {
+		let filtered = seatInfo
 		if (startDate && endDate) {
-			filtered = bookingInfo.filter((booking) => {
-				const bookingStarDate = parseISO(booking.checkInDate)
-				const bookingEndDate = parseISO(booking.checkOutDate)
+			filtered = seatInfo.filter((seat) => {
+				const seatStartDate = parseISO(seat.airplane.departureDate)
+				const seatEndDate = parseISO(seat.airplane.landingDate)
 				return (
-					bookingStarDate >= startDate && bookingEndDate <= endDate && bookingEndDate > startDate
+					seatStartDate >= startDate && seatEndDate <= endDate && seatEndDate > startDate
 				)
 			})
 		}
-		setFilteredBookings(filtered)
+		setFilteredSeats(filtered)
 	}
-
 	useEffect(() => {
-		setFilteredBookings(bookingInfo)
-	}, [bookingInfo])
-
+		setFilteredSeats(seatInfo)
+	}, [seatInfo])
 	return (
 		<section className="p-4">
-			<DateSlider onDateChange={filterBooknigs} onFilterChange={filterBooknigs} />
+			<DateSlider onDateChange={filterSeats} onFilterChange={filterSeats} />
 			<table className="table table-bordered table-hover shadow">
 				<thead>
 					<tr>
 						<th>S/N</th>
-						<th>Booking ID</th>
-						<th>Room ID</th>
-						<th>Room Type</th>
-						<th>Check-In Date</th>
-						<th>Check-Out Date</th>
+						<th>Seat ID</th>
+						<th>Airplane ID</th>
+						<th>Airplane Type</th>
+						<th>Departure Date</th>
+						<th>Landing Date</th>
 						<th>Guest Name</th>
 						<th>Guest Email</th>
-						<th>Adults</th>
-						<th>Children</th>
-						<th>Total Guest</th>
 						<th>Confirmation Code</th>
 						<th colSpan={2}>Actions</th>
 					</tr>
 				</thead>
 				<tbody className="text-center">
-					{filteredBookings.map((booking, index) => (
-						<tr key={booking.id}>
+					{filteredSeats.map((seat, index) => (
+						<tr key={seat.id}>
 							<td>{index + 1}</td>
-							<td>{booking.id}</td>
-							<td>{booking.room.id}</td>
-							<td>{booking.room.roomType}</td>
-							<td>{booking.checkInDate}</td>
-							<td>{booking.checkOutDate}</td>
-							<td>{booking.guestName}</td>
-							<td>{booking.guestEmail}</td>
-							<td>{booking.numOfAdults}</td>
-							<td>{booking.numOfChildren}</td>
-							<td>{booking.totalNumOfGuests}</td>
-							<td>{booking.bookingConfirmationCode}</td>
+							<td>{seat.id}</td>
+							<td>{seat.airplane.id}</td>
+							<td>{seat.airplane.airplaneType}</td>
+							<td>{seat.airplane.departureDate}</td>
+							<td>{seat.airplane.landingDate}</td>
+							<td>{seat.guestName}</td>
+							<td>{seat.guestEmail}</td>
+							<td>{seat.seatConfirmationCode}</td>
 							<td>
 								<button
 									className="btn btn-danger btn-sm"
-									onClick={() => handleBookingCancellation(booking.id)}>
+									onClick={() => handleSeatCancellation(seat.id)}>
 									Cancel
 								</button>
 							</td>
@@ -70,9 +61,8 @@ const BookingsTable = ({ bookingInfo, handleBookingCancellation }) => {
 					))}
 				</tbody>
 			</table>
-			{filterBooknigs.length === 0 && <p> No booking found for the selected dates</p>}
+			{filterSeats.length === 0 && <p> No Seat found for the selected dates</p>}
 		</section>
 	)
 }
-
-export default BookingsTable
+export default SeatsTable

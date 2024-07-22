@@ -1,37 +1,32 @@
 import React, { useState } from "react"
 
-const RoomFilter = ({ data, setFilteredData }) => {
+const AirplaneFilter = ({ data, setFilteredData }) => {
 	const [filter, setFilter] = useState("")
-
 	const handleSelectChange = (e) => {
 		const selectedType = e.target.value
 		setFilter(selectedType)
-
-		const filteredRooms = data.filter((room) =>
-			room.roomType.toLowerCase().includes(selectedType.toLowerCase())
+		const filteredAirplanes = data.filter((airplane) =>
+			airplane.airplaneType.toLowerCase().includes(selectedType.toLowerCase())
 		)
-		setFilteredData(filteredRooms)
+		setFilteredData(filteredAirplanes)
 	}
-
 	const clearFilter = () => {
 		setFilter("")
 		setFilteredData(data)
 	}
-
-	const roomTypes = ["", ...new Set(data.map((room) => room.roomType))]
-
+	const airplaneTypes = ["", ...new Set(data.map((airplane) => airplane.airplaneType))]
 	return (
 		<div className="input-group mb-3">
-			<span className="input-group-text" id="room-type-filter">
-				FIlter rooms by type
+			<span className="input-group-text" id="Airplane-type-filter">
+				FIlter Airplanes by Brand
 			</span>
 			<select
 				className="form-select"
 				aria-label="romm type filter"
 				value={filter}
 				onChange={handleSelectChange}>
-				<option value="">select a room type to filter....</option>
-				{roomTypes.map((type, index) => (
+				<option value="">select a Airplane Brand to filter....</option>
+				{airplaneTypes.map((type, index) => (
 					<option key={index} value={String(type)}>
 						{String(type)}
 					</option>
@@ -43,4 +38,4 @@ const RoomFilter = ({ data, setFilteredData }) => {
 		</div>
 	)
 }
-export default RoomFilter
+export default AirplaneFilter

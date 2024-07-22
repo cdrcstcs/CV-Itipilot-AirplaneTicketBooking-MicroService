@@ -23,7 +23,7 @@ public class Seat {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "airplane_id")
-    private Airplane airplane; // Changed 'room' to 'airplane'
+    private Airplane airplane; 
 
     public void setSeatConfirmationCode(String seatConfirmationCode) {
         this.seatConfirmationCode = seatConfirmationCode;

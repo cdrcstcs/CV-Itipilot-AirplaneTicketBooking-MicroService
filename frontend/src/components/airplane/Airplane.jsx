@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react"
-import { getAllRooms } from "../utils/ApiFunctions"
-import RoomCard from "./AirplaneCard"
+import { getAllAirplanes } from "../utils/ApiFunctions"
+import AirplaneCard from "./AirplaneCard"
 import { Col, Container, Row } from "react-bootstrap"
-import RoomFilter from "../common/AirplaneFilter"
-import RoomPaginator from "../common/AirplanePaginator"
+import AirplaneFilter from "../common/AirplaneFilter"
+import AirplanePaginator from "../common/AirplanePaginator"
 
-const Room = () => {
+const Airplane = () => {
 	const [data, setData] = useState([])
 	const [error, setError] = useState(null)
 	const [isLoading, setIsLoading] = useState(false)
 	const [currentPage, setCurrentPage] = useState(1)
-	const [roomsPerPage] = useState(6)
+	const [airplanesPerPage] = useState(6)
 	const [filteredData, setFilteredData] = useState([{ id: "" }])
-
 	useEffect(() => {
 		setIsLoading(true)
-		getAllRooms()
+		getAllAirplanes()
 			.then((data) => {
 				setData(data)
 				setFilteredData(data)
@@ -27,47 +26,40 @@ const Room = () => {
 			})
 	}, [])
 	if (isLoading) {
-		return <div>Loading rooms.....</div>
+		return <div>Loading Airplanes.....</div>
 	}
 	if (error) {
 		return <div className=" text-danger">Error : {error}</div>
 	}
-
 	const handlePageChange = (pageNumber) => {
 		setCurrentPage(pageNumber)
 	}
-
-	const totalPages = Math.ceil(filteredData.length / roomsPerPage)
-
-	const renderRooms = () => {
-		const startIndex = (currentPage - 1) * roomsPerPage
-		const endIndex = startIndex + roomsPerPage
+	const totalPages = Math.ceil(filteredData.length / airplanesPerPage)
+	const renderAirplanes = () => {
+		const startIndex = (currentPage - 1) * airplanesPerPage
+		const endIndex = startIndex + airplanesPerPage
 		return filteredData
 			.slice(startIndex, endIndex)
-			.map((room) => <RoomCard key={room.id} room={room} />)
+			.map((Airplane) => <AirplaneCard key={Airplane.id} Airplane={Airplane} />)
 	}
-
 	return (
 		<Container>
 			<Row>
 				<Col md={6} className="mb-3 mb-md-0">
-					<RoomFilter data={data} setFilteredData={setFilteredData} />
+					<AirplaneFilter data={data} setFilteredData={setFilteredData} />
 				</Col>
-
 				<Col md={6} className="d-flex align-items-center justify-content-end">
-					<RoomPaginator
+					<AirplanePaginator
 						currentPage={currentPage}
 						totalPages={totalPages}
 						onPageChange={handlePageChange}
 					/>
 				</Col>
 			</Row>
-
-			<Row>{renderRooms()}</Row>
-
+			<Row>{renderAirplanes()}</Row>
 			<Row>
 				<Col md={6} className="d-flex align-items-center justify-content-end">
-					<RoomPaginator
+					<AirplanePaginator
 						currentPage={currentPage}
 						totalPages={totalPages}
 						onPageChange={handlePageChange}
@@ -77,5 +69,4 @@ const Room = () => {
 		</Container>
 	)
 }
-
-export default Room
+export default Airplane

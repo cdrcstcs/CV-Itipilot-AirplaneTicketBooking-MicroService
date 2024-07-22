@@ -1,71 +1,57 @@
 import React, { useState } from "react"
 import moment from "moment"
-import { cancelBooking, getBookingByConfirmationCode } from "../utils/ApiFunctions"
-
-const FindBooking = () => {
+import { cancelSeat, getSeatByConfirmationCode } from "../utils/ApiFunctions"
+const FindSeat = () => {
 	const [confirmationCode, setConfirmationCode] = useState("")
 	const [error, setError] = useState(null)
 	const [successMessage, setSuccessMessage] = useState("")
 	const [isLoading, setIsLoading] = useState(false)
-	const [bookingInfo, setBookingInfo] = useState({
+	const [seatInfo, setSeatInfo] = useState({
 		id: "",
-		bookingConfirmationCode: "",
-		room: { id: "", roomType: "" },
-		roomNumber: "",
-		checkInDate: "",
-		checkOutDate: "",
+		seatConfirmationCode: "",
+		airplane: { id: "", airplaneType: "" },
+		departureDate: "",
+		landingDate: "",
 		guestName: "",
 		guestEmail: "",
-		numOfAdults: "",
-		numOfChildren: "",
-		totalNumOfGuests: ""
 	})
 
-	const emptyBookingInfo = {
+	const emptySeatInfo = {
 		id: "",
-		bookingConfirmationCode: "",
-		room: { id: "", roomType: "" },
-		roomNumber: "",
-		checkInDate: "",
-		checkOutDate: "",
+		seatConfirmationCode: "",
+		airplane: { id: "", airplaneType: "" },
+		departureDate: "",
+		landingDate: "",
 		guestName: "",
 		guestEmail: "",
-		numOfAdults: "",
-		numOfChildren: "",
-		totalNumOfGuests: ""
 	}
 	const [isDeleted, setIsDeleted] = useState(false)
-
 	const handleInputChange = (event) => {
 		setConfirmationCode(event.target.value)
 	}
-
 	const handleFormSubmit = async (event) => {
 		event.preventDefault()
 		setIsLoading(true)
-
 		try {
-			const data = await getBookingByConfirmationCode(confirmationCode)
-			setBookingInfo(data)
+			const data = await getSeatByConfirmationCode(confirmationCode)
+			setSeatInfo(data)
 			setError(null)
 		} catch (error) {
-			setBookingInfo(emptyBookingInfo)
+			setSeatInfo(emptySeatInfo)
 			if (error.response && error.response.status === 404) {
 				setError(error.response.data.message)
 			} else {
 				setError(error.message)
 			}
 		}
-
 		setTimeout(() => setIsLoading(false), 2000)
 	}
-
-	const handleBookingCancellation = async (bookingId) => {
+	const handleSeatCancellation = async (seatId) => {
 		try {
-			await cancelBooking(bookingInfo.id)
+			await cancelSeat(seatId)
 			setIsDeleted(true)
-			setSuccessMessage("Booking has been cancelled successfully!")
-			setBookingInfo(emptyBookingInfo)
+			setSuccessMessage("Seat has been cancelled successfully!")
+			setSeatInfo(emptySeatInfo)
 			setConfirmationCode("")
 			setError(null)
 		} catch (error) {
@@ -76,11 +62,10 @@ const FindBooking = () => {
 			setIsDeleted(false)
 		}, 2000)
 	}
-
 	return (
 		<>
 			<div className="container mt-5 d-flex flex-column justify-content-center align-items-center">
-				<h2 className="text-center mb-4">Find My Booking</h2>
+				<h2 className="text-center mb-4">Find My Seat</h2>
 				<form onSubmit={handleFormSubmit} className="col-md-6">
 					<div className="input-group mb-3">
 						<input
@@ -90,55 +75,47 @@ const FindBooking = () => {
 							name="confirmationCode"
 							value={confirmationCode}
 							onChange={handleInputChange}
-							placeholder="Enter the booking confirmation code"
+							placeholder="Enter the Seat confirmation code"
 						/>
-
 						<button type="submit" className="btn btn-hotel input-group-text">
-							Find booking
+							Find Seat
 						</button>
 					</div>
 				</form>
-
 				{isLoading ? (
-					<div>Finding your booking...</div>
+					<div>Finding your Seat...</div>
 				) : error ? (
 					<div className="text-danger">Error: {error}</div>
-				) : bookingInfo.bookingConfirmationCode ? (
+				) : seatInfo.seatConfirmationCode ? (
 					<div className="col-md-6 mt-4 mb-5">
-						<h3>Booking Information</h3>
-						<p className="text-success">Confirmation Code: {bookingInfo.bookingConfirmationCode}</p>
-						<p>Room Number: {bookingInfo.room.id}</p>
-						<p>Room Type: {bookingInfo.room.roomType}</p>
+						<h3>Seat Information</h3>
+						<p className="text-success">Confirmation Code: {seatInfo.seatConfirmationCode}</p>
+						<p>airplane Number: {seatInfo.airplane.id}</p>
+						<p>airplane Type: {seatInfo.airplane.airplaneType}</p>
 						<p>
-							Check-in Date:{" "}
-							{moment(bookingInfo.checkInDate).subtract(1, "month").format("MMM Do, YYYY")}
+							Departure Date:{" "}
+							{moment(seatInfo.departureDate).subtract(1, "month").format("MMM Do, YYYY")}
 						</p>
 						<p>
-							Check-out Date:{" "}
-							{moment(bookingInfo.checkInDate).subtract(1, "month").format("MMM Do, YYYY")}
+							Landing Date:{" "}
+							{moment(seatInfo.landingDate).subtract(1, "month").format("MMM Do, YYYY")}
 						</p>
-						<p>Full Name: {bookingInfo.guestName}</p>
-						<p>Email Address: {bookingInfo.guestEmail}</p>
-						<p>Adults: {bookingInfo.numOfAdults}</p>
-						<p>Children: {bookingInfo.numOfChildren}</p>
-						<p>Total Guest: {bookingInfo.totalNumOfGuests}</p>
-
+						<p>Full Name: {seatInfo.guestName}</p>
+						<p>Email Address: {seatInfo.guestEmail}</p>
 						{!isDeleted && (
 							<button
-								onClick={() => handleBookingCancellation(bookingInfo.id)}
+								onClick={() => handleSeatCancellation(seatInfo.id)}
 								className="btn btn-danger">
-								Cancel Booking
+								Cancel Seat
 							</button>
 						)}
 					</div>
 				) : (
-					<div>find booking...</div>
+					<div>find Seat...</div>
 				)}
-
 				{isDeleted && <div className="alert alert-success mt-3 fade show">{successMessage}</div>}
 			</div>
 		</>
 	)
 }
-
-export default FindBooking
+export default FindSeat

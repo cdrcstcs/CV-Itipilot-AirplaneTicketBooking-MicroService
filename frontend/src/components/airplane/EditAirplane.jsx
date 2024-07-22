@@ -1,67 +1,58 @@
 import React, { useEffect, useState } from "react"
-import { getRoomById, updateRoom } from "../utils/ApiFunctions"
+import { getAirplaneById, updateAirplane } from "../utils/ApiFunctions"
 import { Link, useParams } from "react-router-dom"
-
-const EditRoom = () => {
-	const [room, setRoom] = useState({
+const EditAirplane = () => {
+	const [airplane, setAirplane] = useState({
 		photo: "",
-		roomType: "",
-		roomPrice: ""
+		airplaneType: "",
+		ticketPrice: ""
 	})
-
 	const [imagePreview, setImagePreview] = useState("")
 	const [successMessage, setSuccessMessage] = useState("")
 	const [errorMessage, setErrorMessage] = useState("")
-	const { roomId } = useParams()
-
+	const { airplaneId } = useParams()
 	const handleImageChange = (e) => {
 		const selectedImage = e.target.files[0]
-		setRoom({ ...room, photo: selectedImage })
+		setAirplane({ ...airplane, photo: selectedImage })
 		setImagePreview(URL.createObjectURL(selectedImage))
 	}
-
 	const handleInputChange = (event) => {
 		const { name, value } = event.target
-		setRoom({ ...room, [name]: value })
+		setAirplane({ ...airplane, [name]: value })
 	}
-
 	useEffect(() => {
-		const fetchRoom = async () => {
+		const fetchAirplane = async () => {
 			try {
-				const roomData = await getRoomById(roomId)
-				setRoom(roomData)
-				setImagePreview(roomData.photo)
+				const AirplaneData = await getAirplaneById(airplaneId)
+				setAirplane(AirplaneData)
+				setImagePreview(AirplaneData.photo)
 			} catch (error) {
 				console.error(error)
 			}
 		}
-
-		fetchRoom()
-	}, [roomId])
-
+		fetchAirplane()
+	}, [airplaneId])
 	const handleSubmit = async (e) => {
 		e.preventDefault()
-
 		try {
-			const response = await updateRoom(roomId, room)
+			const response = await updateAirplane(airplaneId, airplane)
 			if (response.status === 200) {
-				setSuccessMessage("Room updated successfully!")
-				const updatedRoomData = await getRoomById(roomId)
-				setRoom(updatedRoomData)
-				setImagePreview(updatedRoomData.photo)
+				setSuccessMessage("Airplane updated successfully!")
+				const updatedAirplaneData = await getAirplaneById(airplaneId)
+				setAirplane(updatedAirplaneData)
+				setImagePreview(updatedAirplaneData.photo)
 				setErrorMessage("")
 			} else {
-				setErrorMessage("Error updating room")
+				setErrorMessage("Error updating Airplane")
 			}
 		} catch (error) {
 			console.error(error)
 			setErrorMessage(error.message)
 		}
 	}
-
 	return (
 		<div className="container mt-5 mb-5">
-			<h3 className="text-center mb-5 mt-5">Edit Room</h3>
+			<h3 className="text-center mb-5 mt-5">Edit Airplane</h3>
 			<div className="row justify-content-center">
 				<div className="col-md-8 col-lg-6">
 					{successMessage && (
@@ -76,28 +67,28 @@ const EditRoom = () => {
 					)}
 					<form onSubmit={handleSubmit}>
 						<div className="mb-3">
-							<label htmlFor="roomType" className="form-label hotel-color">
-								Room Type
+							<label htmlFor="AirplaneType" className="form-label hotel-color">
+								Airplane Type
 							</label>
 							<input
 								type="text"
 								className="form-control"
-								id="roomType"
-								name="roomType"
-								value={room.roomType}
+								id="AirplaneType"
+								name="AirplaneType"
+								value={airplane.AirplaneType}
 								onChange={handleInputChange}
 							/>
 						</div>
 						<div className="mb-3">
-							<label htmlFor="roomPrice" className="form-label hotel-color">
-								Room Price
+							<label htmlFor="AirplanePrice" className="form-label hotel-color">
+								Airplane Price
 							</label>
 							<input
 								type="number"
 								className="form-control"
-								id="roomPrice"
-								name="roomPrice"
-								value={room.roomPrice}
+								id="AirplanePrice"
+								name="AirplanePrice"
+								value={airplane.ticketPrice}
 								onChange={handleInputChange}
 							/>
 						</div>
@@ -117,18 +108,18 @@ const EditRoom = () => {
 							{imagePreview && (
 								<img
 									src={`data:image/jpeg;base64,${imagePreview}`}
-									alt="Room preview"
+									alt="Airplane preview"
 									style={{ maxWidth: "400px", maxHeight: "400" }}
 									className="mt-3"
 								/>
 							)}
 						</div>
 						<div className="d-grid gap-2 d-md-flex mt-2">
-							<Link to={"/existing-rooms"} className="btn btn-outline-info ml-5">
-								back
+							<Link to={"/existing-Airplanes"} className="btn btn-outline-info ml-5">
+								Back
 							</Link>
 							<button type="submit" className="btn btn-outline-warning">
-								Edit Room
+								Edit Airplane
 							</button>
 						</div>
 					</form>
@@ -137,4 +128,4 @@ const EditRoom = () => {
 		</div>
 	)
 }
-export default EditRoom
+export default EditAirplane

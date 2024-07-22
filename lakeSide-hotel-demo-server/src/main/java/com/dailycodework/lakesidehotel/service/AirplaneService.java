@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -100,7 +101,7 @@ public class AirplaneService implements IAirplaneService {
     }
 
     @Override
-    public List<Airplane> getAvailableAirplanesByType(String airplaneType) {
-        return airplaneRepository.findAvailableAirplanesByType(airplaneType);
+    public List<Airplane> getAvailableAirplanes(LocalDate departureDate, LocalDate landingDate, String airplaneType) {
+        return airplaneRepository.findAvailableAirplanes(departureDate, landingDate, airplaneType);
     }
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import BookingForm from "./SeatForm"
+import AirplaneForm from "./SeatForm"
 import {
 	FaUtensils,
 	FaWifi,
@@ -11,25 +11,23 @@ import {
 } from "react-icons/fa"
 
 import { useParams } from "react-router-dom"
-import { getRoomById } from "../utils/ApiFunctions"
-import RoomCarousel from "../common/AirplaneCarousel"
+import { getAirplaneById } from "../utils/ApiFunctions"
+import AirplaneCarousel from "../common/AirplaneCarousel"
 
 const Checkout = () => {
 	const [error, setError] = useState(null)
 	const [isLoading, setIsLoading] = useState(true)
-	const [roomInfo, setRoomInfo] = useState({
+	const [airplaneInfo, setAirplaneInfo] = useState({
 		photo: "",
-		roomType: "",
-		roomPrice: ""
+		airplaneType: "",
+		ticketPrice: ""
 	})
-
-	const { roomId } = useParams()
-
+	const { airplaneId } = useParams()
 	useEffect(() => {
 		setTimeout(() => {
-			getRoomById(roomId)
+			getAirplaneById(airplaneId)
 				.then((response) => {
-					setRoomInfo(response)
+					setAirplaneInfo(response)
 					setIsLoading(false)
 				})
 				.catch((error) => {
@@ -37,61 +35,32 @@ const Checkout = () => {
 					setIsLoading(false)
 				})
 		}, 1000)
-	}, [roomId])
-
+	}, [airplaneId])
 	return (
 		<div>
 			<section className="container">
 				<div className="row">
 					<div className="col-md-4 mt-5 mb-5">
 						{isLoading ? (
-							<p>Loading room information...</p>
+							<p>Loading Airplane information...</p>
 						) : error ? (
 							<p>{error}</p>
 						) : (
-							<div className="room-info">
+							<div className="Airplane-info">
 								<img
-									src={`data:image/png;base64,${roomInfo.photo}`}
-									alt="Room photo"
+									src={`data:image/png;base64,${airplaneInfo.photo}`}
+									alt="Airplane photo"
 									style={{ width: "100%", height: "200px" }}
 								/>
 								<table className="table table-bordered">
 									<tbody>
 										<tr>
-											<th>Room Type:</th>
-											<td>{roomInfo.roomType}</td>
+											<th>Airplane Type:</th>
+											<td>{airplaneInfo.airplaneType}</td>
 										</tr>
 										<tr>
-											<th>Price per night:</th>
-											<td>${roomInfo.roomPrice}</td>
-										</tr>
-										<tr>
-											<th>Room Service:</th>
-											<td>
-												<ul className="list-unstyled">
-													<li>
-														<FaWifi /> Wifi
-													</li>
-													<li>
-														<FaTv /> Netfilx Premium
-													</li>
-													<li>
-														<FaUtensils /> Breakfast
-													</li>
-													<li>
-														<FaWineGlassAlt /> Mini bar refreshment
-													</li>
-													<li>
-														<FaCar /> Car Service
-													</li>
-													<li>
-														<FaParking /> Parking Space
-													</li>
-													<li>
-														<FaTshirt /> Laundry
-													</li>
-												</ul>
-											</td>
+											<th>Price per ticket</th>
+											<td>${airplaneInfo.ticketPrice}</td>
 										</tr>
 									</tbody>
 								</table>
@@ -99,12 +68,12 @@ const Checkout = () => {
 						)}
 					</div>
 					<div className="col-md-8">
-						<BookingForm />
+						<AirplaneForm />
 					</div>
 				</div>
 			</section>
 			<div className="container">
-				<RoomCarousel />
+				<AirplaneCarousel />
 			</div>
 		</div>
 	)

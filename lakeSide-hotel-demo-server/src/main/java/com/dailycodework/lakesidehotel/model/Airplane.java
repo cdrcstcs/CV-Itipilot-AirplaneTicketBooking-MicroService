@@ -7,6 +7,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.math.BigDecimal;
 import java.sql.Blob;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,15 @@ public class Airplane {
 
     private BigDecimal ticketPrice;
 
+    @Column(name = "departureDate")
+    private LocalDate departureDate;
+
+    @Column(name = "landingDate")
+    private LocalDate landingDate;
+
+    @Column(name = "capacity")
+    private int capacity;
+
     @Lob
     private Blob photo;
 
@@ -30,7 +40,8 @@ public class Airplane {
 
     public void addSeat(Seat seat) {
         seats.add(seat);
-        seat.setAirplane(this); // Set the relationship on both sides
+        capacity = capacity + 1;
+        seat.setAirplane(this);
         String seatCode = RandomStringUtils.randomNumeric(10);
         seat.setSeatConfirmationCode(seatCode);
     }
