@@ -9,11 +9,14 @@ export const getHeader = () => {
 		"Content-Type": "application/json"
 	}
 }
-export async function addAirplane(photo, airplaneType, ticketPrice) {
+export async function addAirplane(photo, airplaneType, ticketPrice, capacity, departureDate, landingDate) {
 	const formData = new FormData()
 	formData.append("photo", photo)
 	formData.append("airplaneType", airplaneType)
 	formData.append("ticketPrice", ticketPrice)
+	formData.append("capacity", capacity)
+	formData.append("departureDate", departureDate)
+	formData.append("landingDate", landingDate)
 	const response = await api.post("/airplanes/add/new-airplane", formData,{
 		headers: getHeader()
 	})
@@ -49,11 +52,14 @@ export async function deleteAirplane(airplaneId) {
 		throw new Error(`Error deleting room ${error.message}`)
 	}
 }
-export async function updateAirplane(airplaneId, airplaneData) {
+export async function updateAirplane(airplaneId, airplaneData, capacity, departureDate, landingDate) {
 	const formData = new FormData()
 	formData.append("airplaneType", airplaneData.airplaneType)
 	formData.append("ticketPrice", airplaneData.ticketPrice)
 	formData.append("photo", airplaneData.photo)
+	formData.append("capacity", capacity)
+	formData.append("departureDate", departureDate)
+	formData.append("landingDate", landingDate)
 	const response = await api.put(`/airplanes/update/${airplaneId}`, formData,{
 		headers: getHeader()
 	})

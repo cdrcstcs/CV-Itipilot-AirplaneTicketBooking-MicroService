@@ -72,13 +72,16 @@ public class SeatController {
                 seat.getAirplane().getId(),
                 seat.getAirplane().getAirplaneType(),
                 seat.getAirplane().getTicketPrice(),
-                seat.getAirplane().getPhoto().getBytes(0, 64),  // Assuming photo is converted to byte array
+                seat.getAirplane().getPhoto().getBytes(0, 64),
+                seat.getAirplane().getDepartureDate(),
+                seat.getAirplane().getLandingDate()
                 null);  // Assuming Seats field is added to AirplaneResponse
         return new SeatResponse(
             seat.getId(),
             seat.getGuestFullName(),
             seat.getGuestEmail(),
             seat.getSeatConfirmationCode(),
+            airplane,
             airplane
         );
     } catch (SQLException e) {

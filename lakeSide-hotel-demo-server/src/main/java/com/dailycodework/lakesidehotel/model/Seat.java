@@ -1,5 +1,6 @@
 package com.dailycodework.lakesidehotel.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
@@ -22,13 +23,16 @@ public class Seat {
 
     @Column(name = "confirmation_code")
     private String seatConfirmationCode;
+    
+    private BigDecimal ticketPrice;
 
     @Column(name = "departureDate")
     private LocalDate departureDate;
 
+
     @Column(name = "landingDate")
     private LocalDate landingDate;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "airplane_id")
     private Airplane airplane; 
