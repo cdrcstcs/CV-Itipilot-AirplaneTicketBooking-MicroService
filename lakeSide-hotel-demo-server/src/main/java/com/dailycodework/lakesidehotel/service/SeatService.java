@@ -38,6 +38,9 @@ public class SeatService implements ISeatService {
         Airplane airplane = airplaneService.getAirplaneById(airplaneId).orElseThrow(() -> new ResourceNotFoundException("Airplane not found with id: " + airplaneId));
         SeatRequest.setAirplane(airplane);
         SeatRepository.save(SeatRequest);
+        SeatRequest.setDepartureDate(airplane.getDepartureDate());
+        SeatRequest.setLandingDate(airplane.getLandingDate());
+        airplane.addSeat(SeatRequest);
         return SeatRequest.getSeatConfirmationCode();
     }
 

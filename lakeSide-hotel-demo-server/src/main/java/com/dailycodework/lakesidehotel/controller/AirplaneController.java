@@ -35,8 +35,11 @@ public class AirplaneController {
     public ResponseEntity<AirplaneResponse> addNewAirplane(
             @RequestParam("photo") MultipartFile photo,
             @RequestParam("airplaneType") String airplaneType,
-            @RequestParam("ticketPrice") BigDecimal ticketPrice) throws SQLException, IOException {
-        Airplane savedAirplane = AirplaneService.addNewAirplane(photo, airplaneType, ticketPrice);
+            @RequestParam("ticketPrice") BigDecimal ticketPrice,
+            @RequestParam(required = false) int capacity,
+            @RequestParam(required = false) LocalDate departurDate,
+            @RequestParam(required = false) LocalDate landingDate) throws SQLException, IOException {
+        Airplane savedAirplane = AirplaneService.addNewAirplane(photo, airplaneType, ticketPrice, capacity, departurDate, landingDate);
         AirplaneResponse response = new AirplaneResponse(savedAirplane.getId(), savedAirplane.getAirplaneType(),savedAirplane.getTicketPrice());
         return ResponseEntity.ok(response);
     }
@@ -70,11 +73,14 @@ public class AirplaneController {
     public ResponseEntity<AirplaneResponse> updateAirplane(@PathVariable Long airplaneId,
                                                    @RequestParam(required = false)  String airplaneType,
                                                    @RequestParam(required = false) BigDecimal ticketPrice,
+                                                   @RequestParam(required = false) int capacity,
+                                                   @RequestParam(required = false) LocalDate departurDate,
+                                                   @RequestParam(required = false) LocalDate landingDate,
                                                    @RequestParam(required = false) MultipartFile photo) throws SQLException, IOException {
         byte[] photoBytes = photo != null && !photo.isEmpty() ?
                 photo.getBytes() : AirplaneService.getAirplanePhotoByAirplaneId(airplaneId);
         Blob photoBlob = photoBytes != null && photoBytes.length >0 ? new SerialBlob(photoBytes): null;
-        Airplane theAirplane = AirplaneService.updateAirplane(airplaneId, airplaneType, ticketPrice, photoBytes);
+        Airplane theAirplane = AirplaneService.updateAirplane(airplaneId, airplaneType, ticketPrice, photoBytes, capacity, departurDate, landingDate);
         theAirplane.setPhoto(photoBlob);
         AirplaneResponse airplaneResponse = getAirplaneResponse(theAirplane);
         return ResponseEntity.ok(airplaneResponse);

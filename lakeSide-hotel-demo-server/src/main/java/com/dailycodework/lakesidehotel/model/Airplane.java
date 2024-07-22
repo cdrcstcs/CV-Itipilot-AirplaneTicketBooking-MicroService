@@ -42,6 +42,8 @@ public class Airplane {
         seats.add(seat);
         capacity = capacity + 1;
         seat.setAirplane(this);
+        seat.setDepartureDate(this.departureDate);
+        seat.setLandingDate(this.landingDate);
         String seatCode = RandomStringUtils.randomNumeric(10);
         seat.setSeatConfirmationCode(seatCode);
     }

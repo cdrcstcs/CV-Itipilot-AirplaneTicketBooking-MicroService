@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface IAirplaneService {
 
-    Airplane addNewAirplane(MultipartFile photo, String airplaneType, BigDecimal ticketPrice) throws SQLException, IOException;
+    Airplane addNewAirplane(MultipartFile photo, String airplaneType, BigDecimal ticketPrice, int capacity, LocalDate departureDate, LocalDate landingDate) throws SQLException, IOException;
 
     List<String> getAllAirplaneTypes();
 
@@ -22,7 +22,7 @@ public interface IAirplaneService {
 
     void deleteAirplane(Long airplaneId);
 
-    Airplane updateAirplane(Long airplaneId, String airplaneType, BigDecimal ticketPrice, byte[] photoBytes);
+    Airplane updateAirplane(Long airplaneId, String airplaneType, BigDecimal ticketPrice, byte[] photoBytes, int capacity,LocalDate departureDate, LocalDate landingDate);
 
     Optional<Airplane> getAirplaneById(Long airplaneId);
 

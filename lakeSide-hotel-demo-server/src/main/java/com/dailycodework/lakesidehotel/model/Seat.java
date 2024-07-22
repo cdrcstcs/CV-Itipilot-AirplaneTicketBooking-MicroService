@@ -1,5 +1,7 @@
 package com.dailycodework.lakesidehotel.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +23,12 @@ public class Seat {
     @Column(name = "confirmation_code")
     private String seatConfirmationCode;
 
+    @Column(name = "departureDate")
+    private LocalDate departureDate;
+
+    @Column(name = "landingDate")
+    private LocalDate landingDate;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "airplane_id")
     private Airplane airplane; 

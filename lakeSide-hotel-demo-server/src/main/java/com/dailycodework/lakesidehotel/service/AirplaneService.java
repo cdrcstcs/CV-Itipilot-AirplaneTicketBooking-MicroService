@@ -21,20 +21,20 @@ public class AirplaneService implements IAirplaneService {
     private final AirplaneRepository airplaneRepository;
 
     @Override
-    public Airplane addNewAirplane(MultipartFile photo, String airplaneType, BigDecimal ticketPrice) throws SQLException, IOException {
+    public Airplane addNewAirplane(MultipartFile photo, String airplaneType, BigDecimal ticketPrice, int capacity, LocalDate departurDate, LocalDate landingDate) throws SQLException, IOException {
         Airplane airplane = new Airplane();
         airplane.setAirplaneType(airplaneType);
         airplane.setTicketPrice(ticketPrice);
-        
+        airplane.setCapacity(capacity);
+        airplane.setDepartureDate(departurDate);
+        airplane.setLandingDate(landingDate);
         if (!photo.isEmpty()) {
             byte[] photoBytes = photo.getBytes();
             Blob photoBlob = new SerialBlob(photoBytes);
             airplane.setPhoto(photoBlob);
         }
-        
         return airplaneRepository.save(airplane);
     }
-
     @Override
     public List<String> getAllAirplaneTypes() {
         return airplaneRepository.findDistinctAirplaneTypes();
@@ -72,18 +72,21 @@ public class AirplaneService implements IAirplaneService {
     }
 
     @Override
-    public Airplane updateAirplane(Long airplaneId, String airplaneType, BigDecimal ticketPrice, byte[] photoBytes) {
-        Airplane airplane = airplaneRepository.findById(airplaneId)
-                .orElseThrow(() -> new ResourceNotFoundException("Airplane not found with id: " + airplaneId));
-        
+    public Airplane updateAirplane(Long airplaneId, String airplaneType, BigDecimal ticketPrice, byte[] photoBytes, int capacity, LocalDate departureDate, LocalDate landingDate) {
+        Airplane airplane = airplaneRepository.findById(airplaneId).orElseThrow(() -> new ResourceNotFoundException("Airplane not found with id: " + airplaneId));
         if (airplaneType != null) {
             airplane.setAirplaneType(airplaneType);
         }
-        
         if (ticketPrice != null) {
             airplane.setTicketPrice(ticketPrice);
         }
-        
+        if (capacity != 0){
+            airplane.setCapacity(capacity);
+        }
+        if (departureDate != null && landingDate != null){
+            airplane.setDepartureDate(departureDate);
+            airplane.setLandingDate(landingDate);
+        }
         if (photoBytes != null && photoBytes.length > 0) {
             try {
                 airplane.setPhoto(new SerialBlob(photoBytes));
@@ -91,7 +94,6 @@ public class AirplaneService implements IAirplaneService {
                 throw new InternalServerException("Failed to update airplane");
             }
         }
-        
         return airplaneRepository.save(airplane);
     }
 
