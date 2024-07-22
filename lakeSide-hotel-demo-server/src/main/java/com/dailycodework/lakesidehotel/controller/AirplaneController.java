@@ -36,11 +36,11 @@ public class AirplaneController {
             @RequestParam("photo") MultipartFile photo,
             @RequestParam("airplaneType") String airplaneType,
             @RequestParam("ticketPrice") BigDecimal ticketPrice,
-            @RequestParam(required = false) int capacity,
-            @RequestParam(required = false) LocalDate departurDate,
-            @RequestParam(required = false) LocalDate landingDate) throws SQLException, IOException {
+            @RequestParam("capacity") int capacity,
+            @RequestParam("departureDate") LocalDate departurDate,
+            @RequestParam("landingDate") LocalDate landingDate) throws SQLException, IOException {
         Airplane savedAirplane = AirplaneService.addNewAirplane(photo, airplaneType, ticketPrice, capacity, departurDate, landingDate);
-        AirplaneResponse response = new AirplaneResponse(savedAirplane.getId(), savedAirplane.getAirplaneType(),savedAirplane.getTicketPrice());
+        AirplaneResponse response = new AirplaneResponse(savedAirplane.getId(), savedAirplane.getAirplaneType(),savedAirplane.getTicketPrice(),savedAirplane.getPhoto().getBytes(0,64),null, savedAirplane.getCapacity(),savedAirplane.getDepartureDate(),savedAirplane.getLandingDate());
         return ResponseEntity.ok(response);
     }
     @GetMapping("/airplane/types")
@@ -117,10 +117,20 @@ public class AirplaneController {
         }
     }
     private AirplaneResponse getAirplaneResponse(Airplane airplane) {
-        List<Seat> Seats = getAllSeatsByAirplaneId(airplane.getId());
-       List<SeatResponse> SeatInfo = Seats
-                .stream()
-                .map(Seat -> new SeatResponse(Seat.getId(),Seat.getGuestFullName(), Seat.getGuestEmail(), Seat.getSeatConfirmationCode(),null)).toList();
+        List<Seat> seats = getAllSeatsByAirplaneId(airplane.getId());
+        List<SeatResponse> seatResponses = seats.stream()
+                .map(seat -> new SeatResponse(
+                        seat.getId(),
+                        seat.getGuestFullName(),
+                        seat.getGuestEmail(),
+                        seat.getSeatConfirmationCode(),
+                        null, // Assuming 'airplane' field in SeatResponse is nullable or should be set later
+                        seat.getDepartureDate(),
+                        seat.getLandingDate(),
+                        seat.getTicketPrice()
+                ))
+                .toList();
+    
         byte[] photoBytes = null;
         Blob photoBlob = airplane.getPhoto();
         if (photoBlob != null) {
@@ -130,8 +140,19 @@ public class AirplaneController {
                 throw new PhotoRetrievalException("Error retrieving photo");
             }
         }
-        return new AirplaneResponse(airplane.getId(),airplane.getAirplaneType(), airplane.getTicketPrice(), photoBytes, SeatInfo);
+    
+        return new AirplaneResponse(
+                airplane.getId(),
+                airplane.getAirplaneType(),
+                airplane.getTicketPrice(),
+                photoBytes,
+                seatResponses, // Assuming 'seats' field is added to AirplaneResponse
+                airplane.getCapacity(),
+                airplane.getDepartureDate(),
+                airplane.getLandingDate()
+        );
     }
+    
     private List<Seat> getAllSeatsByAirplaneId(Long AirplaneId) {
         return SeatService.getAllSeatsByAirplaneId(AirplaneId);
     }

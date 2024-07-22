@@ -20,7 +20,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/seats")
 public class SeatController {
+    
     private final ISeatService seatService;
+
     @GetMapping("/all-seats")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<SeatResponse>> getAllSeats() {
@@ -32,6 +34,7 @@ public class SeatController {
         }
         return ResponseEntity.ok(seatResponses);
     }
+
     @PostMapping("/airplane/{airplaneId}/seat")
     public ResponseEntity<?> saveSeat(@PathVariable Long airplaneId, @RequestBody Seat seatRequest) {
         try {
@@ -41,6 +44,7 @@ public class SeatController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
     @GetMapping("/confirmation/{confirmationCode}")
     public ResponseEntity<?> getSeatByConfirmationCode(@PathVariable String confirmationCode) {
         try {
@@ -51,42 +55,50 @@ public class SeatController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
-    @GetMapping("/user/{email}/Seats")
+
+    @GetMapping("/user/{email}/seats")
     public ResponseEntity<List<SeatResponse>> getSeatsByUserEmail(@PathVariable String email) {
         List<Seat> seats = seatService.getSeatsByUserEmail(email);
-        List<SeatResponse> SeatResponses = new ArrayList<>();
+        List<SeatResponse> seatResponses = new ArrayList<>();
         for (Seat seat : seats) {
             SeatResponse seatResponse = getSeatResponse(seat);
-            SeatResponses.add(seatResponse);
+            seatResponses.add(seatResponse);
         }
-        return ResponseEntity.ok(SeatResponses);
+        return ResponseEntity.ok(seatResponses);
     }
+
     @DeleteMapping("/seat/{seatId}/delete")
     public ResponseEntity<String> cancelSeat(@PathVariable Long seatId) {
         seatService.cancelSeat(seatId);
         return ResponseEntity.ok("Seat with ID " + seatId + " has been cancelled.");
     }
+
     private SeatResponse getSeatResponse(Seat seat) {
-    try {
-        AirplaneResponse airplane = new AirplaneResponse(
-                seat.getAirplane().getId(),
-                seat.getAirplane().getAirplaneType(),
-                seat.getAirplane().getTicketPrice(),
-                seat.getAirplane().getPhoto().getBytes(0, 64),
-                seat.getAirplane().getDepartureDate(),
-                seat.getAirplane().getLandingDate()
-                null);  // Assuming Seats field is added to AirplaneResponse
-        return new SeatResponse(
-            seat.getId(),
-            seat.getGuestFullName(),
-            seat.getGuestEmail(),
-            seat.getSeatConfirmationCode(),
-            airplane,
-            airplane
-        );
-    } catch (SQLException e) {
+        try {
+            AirplaneResponse airplaneResponse = new AirplaneResponse(
+                    seat.getAirplane().getId(),
+                    seat.getAirplane().getAirplaneType(),
+                    seat.getAirplane().getTicketPrice(),
+                    seat.getAirplane().getPhoto().getBytes(0, 64),  // Assuming getPhoto returns a byte array
+                    null,
+                    seat.getAirplane().getCapacity(),
+                    seat.getAirplane().getDepartureDate(),
+                    seat.getAirplane().getLandingDate()
+            );
+            return new SeatResponse(
+                    seat.getId(),
+                    seat.getGuestFullName(),
+                    seat.getGuestEmail(),
+                    seat.getSeatConfirmationCode(),
+                    airplaneResponse,
+                    seat.getDepartureDate(),
+                    seat.getLandingDate(),
+                    seat.getAirplane().getTicketPrice()
+            );
+        } catch (SQLException e) {
+            // Handle or log SQLException
             e.printStackTrace();
-            return null; 
+            return null; // Or handle gracefully based on your application's requirements
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.dailycodework.lakesidehotel.response;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import lombok.Data;
@@ -15,8 +16,9 @@ public class SeatResponse {
     private AirplaneResponse airplane; // Changed from 'room' to 'airplane'
     private LocalDate departurDate;
     private LocalDate landingDate;
+    private BigDecimal ticketPrice;
     public SeatResponse(Long id, String guestName,
-                        String guestEmail, String seatConfirmationCode, AirplaneResponse airplane, LocalDate departurDate, LocalDate landingDate) {
+                        String guestEmail, String seatConfirmationCode, AirplaneResponse airplane, LocalDate departurDate, LocalDate landingDate, BigDecimal ticketPrice) {
         this.id = id;
         this.guestName = guestName;
         this.guestEmail = guestEmail;
@@ -24,5 +26,6 @@ public class SeatResponse {
         this.airplane = airplane;
         this.departurDate = departurDate;
         this.landingDate = landingDate;
+        this.ticketPrice = ticketPrice;
     }
 }

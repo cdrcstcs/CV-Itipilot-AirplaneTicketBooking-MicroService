@@ -27,8 +27,7 @@ public class AirplaneResponse {
         this.landingDate = landingDate;
         this.capacity = capacity;
     }
-    public AirplaneResponse(Long id, String airplaneType, BigDecimal ticketPrice,
-                            byte[] photoBytes, List<SeatResponse> seats, int capacity, LocalDate departureDate, LocalDate landingDate) {
+    public AirplaneResponse(Long id, String airplaneType, BigDecimal ticketPrice, byte[] photoBytes, List<SeatResponse> seats, int capacity, LocalDate departureDate, LocalDate landingDate) {
         this.id = id;
         this.airplaneType = airplaneType;
         this.ticketPrice = ticketPrice;
