@@ -50,7 +50,7 @@ const AirplaneTypeSelector = ({ handleAirplaneInputChange, newAirplane }) => {
 								<input
 									type="text"
 									className="form-control"
-									placeholder="Enter New Airplane Type"
+									placeholder="Enter New Airplane Brand"
 									value={newAirplaneType}
 									onChange={handleNewAirplaneTypeInputChange}
 								/>

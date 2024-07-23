@@ -40,7 +40,7 @@ const Airplane = () => {
 		const endIndex = startIndex + airplanesPerPage
 		return filteredData
 			.slice(startIndex, endIndex)
-			.map((Airplane) => <AirplaneCard key={Airplane.id} Airplane={Airplane} />)
+			.map((airplane) => <AirplaneCard key={airplane.id} airplane={airplane} />)
 	}
 	return (
 		<Container>

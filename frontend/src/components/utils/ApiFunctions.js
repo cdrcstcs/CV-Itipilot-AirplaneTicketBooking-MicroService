@@ -52,14 +52,14 @@ export async function deleteAirplane(airplaneId) {
 		throw new Error(`Error deleting room ${error.message}`)
 	}
 }
-export async function updateAirplane(airplaneId, airplaneData, capacity, departureDate, landingDate) {
+export async function updateAirplane(airplaneId, airplaneData) {
 	const formData = new FormData()
 	formData.append("airplaneType", airplaneData.airplaneType)
 	formData.append("ticketPrice", airplaneData.ticketPrice)
 	formData.append("photo", airplaneData.photo)
-	formData.append("capacity", capacity)
-	formData.append("departureDate", departureDate)
-	formData.append("landingDate", landingDate)
+	formData.append("capacity", airplaneData.capacity)
+	formData.append("departureDate", airplaneData.departureDate)
+	formData.append("landingDate", airplaneData.landingDate)
 	const response = await api.put(`/airplanes/update/${airplaneId}`, formData,{
 		headers: getHeader()
 	})

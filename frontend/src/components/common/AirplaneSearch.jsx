@@ -51,7 +51,7 @@ const AirplaneSearch = () => {
 		setSearchQuery({
 			departureDate: "",
 			landingDate: "",
-			AirplaneType: ""
+			airplaneType: ""
 		})
 		setAvailableAirplanes([])
 	}
