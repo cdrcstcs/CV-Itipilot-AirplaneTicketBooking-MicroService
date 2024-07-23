@@ -11,8 +11,8 @@ public interface AirplaneRepository extends JpaRepository<Airplane, Long> {
     @Query("SELECT a " +
            "FROM Airplane a " +
            "WHERE (:airplaneType IS NULL OR a.airplaneType LIKE %:airplaneType%) " +
-           "  AND a.departureDate <= :departureDate " +
-           "  AND a.landingDate >= :landingDate " +
+           "  AND a.departureDate >= :departureDate " +
+           "  AND a.landingDate <= :landingDate " +
            "  AND a.departureDate < a.landingDate " +
            "  AND a.capacity >= 1")
     List<Airplane> findAvailableAirplanes(@Param("departureDate") LocalDate departureDate,
