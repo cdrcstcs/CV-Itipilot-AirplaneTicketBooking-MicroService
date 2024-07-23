@@ -37,7 +37,7 @@ const SeatSummary = ({ seat, onConfirm }) => {
 				role="status"
 				aria-hidden="true"
 			></span>
-			Seat Confirmed
+			Seat Confirming
         </Button>
         </div>
     </div>

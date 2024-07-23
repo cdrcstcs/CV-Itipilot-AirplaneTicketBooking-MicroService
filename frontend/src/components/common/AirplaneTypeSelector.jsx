@@ -7,6 +7,7 @@ const AirplaneTypeSelector = ({ handleAirplaneInputChange, newAirplane }) => {
 	const [newAirplaneType, setNewAirplaneType] = useState("")
 	useEffect(() => {
 		getAirplaneTypes().then((data) => {
+			console.log(data);
 			setAirplaneTypes(data)
 		})
 	}, [])
@@ -35,7 +36,7 @@ const AirplaneTypeSelector = ({ handleAirplaneInputChange, newAirplane }) => {
 								handleAirplaneInputChange(e)
 							}
 						}}
-						value={newAirplane.AirplaneType}>
+						value={newAirplane.airplaneType}>
 						<option value="">Select a Airplane Brand</option>
 						<option value={"Add New"}>Add New</option>
 						{airplaneTypes.map((type, index) => (

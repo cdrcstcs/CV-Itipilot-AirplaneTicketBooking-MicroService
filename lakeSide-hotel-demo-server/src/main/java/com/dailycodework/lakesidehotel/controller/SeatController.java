@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,16 +76,19 @@ public class SeatController {
 
     private SeatResponse getSeatResponse(Seat seat) {
         try {
+            byte[] photoBytes = convertBlobToBytes(seat.getAirplane().getPhoto()); // Convert Blob to byte[]
+            
             AirplaneResponse airplaneResponse = new AirplaneResponse(
                     seat.getAirplane().getId(),
                     seat.getAirplane().getAirplaneType(),
                     seat.getAirplane().getTicketPrice(),
-                    seat.getAirplane().getPhoto().getBytes(0, 64),  // Assuming getPhoto returns a byte array
+                    photoBytes, // Use byte[] directly
                     null,
                     seat.getAirplane().getCapacity(),
                     seat.getAirplane().getDepartureDate(),
                     seat.getAirplane().getLandingDate()
             );
+
             return new SeatResponse(
                     seat.getId(),
                     seat.getGuestFullName(),
@@ -100,5 +104,13 @@ public class SeatController {
             e.printStackTrace();
             return null; // Or handle gracefully based on your application's requirements
         }
+    }
+
+    // Utility method to convert Blob to byte[]
+    private byte[] convertBlobToBytes(Blob blob) throws SQLException {
+        if (blob != null) {
+            return blob.getBytes(1, (int) blob.length()); // Read all bytes from position 1 to the end
+        }
+        return null;
     }
 }

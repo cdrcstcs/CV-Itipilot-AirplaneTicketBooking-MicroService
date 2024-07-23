@@ -6,7 +6,7 @@ export const getHeader = () => {
 	const token = localStorage.getItem("token")
 	return {
 		Authorization: `Bearer ${token}`,
-		"Content-Type": "application/json"
+		"Content-Type": "multipart/form-data"
 	}
 }
 export async function addAirplane(photo, airplaneType, ticketPrice, capacity, departureDate, landingDate) {
@@ -29,6 +29,7 @@ export async function addAirplane(photo, airplaneType, ticketPrice, capacity, de
 export async function getAirplaneTypes() {
 	try {
 		const response = await api.get("/airplanes/airplane/types")
+		console.log(response.data);
 		return response.data
 	} catch (error) {
 		throw new Error("Error fetching room types")
@@ -90,6 +91,7 @@ export async function getAllSeats() {
 		const result = await api.get("/seats/all-seats", {
 			headers: getHeader()
 		})
+		console.log(result.data);
 		return result.data
 	} catch (error) {
 		throw new Error(`Error fetching seats : ${error.message}`)

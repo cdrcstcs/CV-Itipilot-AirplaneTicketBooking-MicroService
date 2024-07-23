@@ -37,20 +37,36 @@ public class AirplaneController {
             @RequestParam("airplaneType") String airplaneType,
             @RequestParam("ticketPrice") BigDecimal ticketPrice,
             @RequestParam("capacity") int capacity,
-            @RequestParam("departureDate") LocalDate departurDate,
-            @RequestParam("landingDate") LocalDate landingDate) throws SQLException, IOException {
-        Airplane savedAirplane = airplaneService.addNewAirplane(photo, airplaneType, ticketPrice, capacity, departurDate, landingDate);
+            @RequestParam("departureDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
+            @RequestParam("landingDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate landingDate) throws SQLException, IOException {
+
+        Airplane savedAirplane = airplaneService.addNewAirplane(photo, airplaneType, ticketPrice, capacity, departureDate, landingDate);
+
+        // Retrieve photo bytes correctly from SerialBlob
+        byte[] photoBytes = null;
+        Blob photoBlob = savedAirplane.getPhoto();
+        if (photoBlob != null) {
+            try {
+                photoBytes = photoBlob.getBytes(1, (int) photoBlob.length()); // Read all bytes from position 1 to the end
+            } catch (SQLException e) {
+                // Handle exception appropriately
+                throw new SQLException("Error retrieving photo bytes from SerialBlob", e);
+            }
+        }
+
         AirplaneResponse response = new AirplaneResponse(
-                                                        savedAirplane.getId(), 
-                                                        savedAirplane.getAirplaneType(),
-                                                        savedAirplane.getTicketPrice(),
-                                                        savedAirplane.getPhoto().getBytes(0,64),
-                                                        null,
-                                                        savedAirplane.getCapacity(),
-                                                        savedAirplane.getDepartureDate(),
-                                                        savedAirplane.getLandingDate());
+                savedAirplane.getId(),
+                savedAirplane.getAirplaneType(),
+                savedAirplane.getTicketPrice(),
+                photoBytes,
+                null, // Assuming seatResponses or related data might be added here
+                savedAirplane.getCapacity(),
+                savedAirplane.getDepartureDate(),
+                savedAirplane.getLandingDate());
+
         return ResponseEntity.ok(response);
     }
+
     @GetMapping("/airplane/types")
     public List<String> getAirplaneTypes() {
         return airplaneService.getAllAirplaneTypes();

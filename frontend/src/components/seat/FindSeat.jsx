@@ -111,7 +111,7 @@ const FindSeat = () => {
 						)}
 					</div>
 				) : (
-					<div>find Seat...</div>
+					<div>Find your seat by seat confirmation code</div>
 				)}
 				{isDeleted && <div className="alert alert-success mt-3 fade show">{successMessage}</div>}
 			</div>

@@ -3,8 +3,11 @@ import { useState } from "react"
 import { Form, FormControl} from "react-bootstrap"
 import SeatSummary from "./SeatSummary"
 import { bookSeat} from "../utils/ApiFunctions"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 const SeatForm = ({airplaneId}) => {
+	if (airplaneId== null){
+		airplaneId = useParams().airplaneId;
+	}
 	const [isSubmitted, setIsSubmitted] = useState(false)
 	const currentUser = localStorage.getItem("userId")
 	const [seat, setSeat] = useState({
