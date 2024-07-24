@@ -5,18 +5,26 @@ import { useNavigate } from "react-router-dom";
 
 const SeatSummary = ({ seat, onConfirm }) => {
   const [isSeatConfirmed, setIsSeatConfirmed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleConfirmSeat = () => {
+    setIsLoading(true); // Set isLoading to true immediately to show spinner
+
+    // Simulate a delay in seat confirmation
     setTimeout(() => {
-      setIsSeatConfirmed(true);
-      onConfirm();
+      setIsSeatConfirmed(true); // Set seat confirmed after delay
+      onConfirm(); // Callback to parent component if needed
     }, 3000);
   };
 
   useEffect(() => {
     if (isSeatConfirmed) {
+      // If seat is confirmed, navigate to success page
       navigate("/seat-success");
+
+      // Reset isLoading state after navigating
+      setIsLoading(false);
     }
   }, [isSeatConfirmed, navigate]);
 
@@ -31,15 +39,17 @@ const SeatSummary = ({ seat, onConfirm }) => {
         <p>
           Email: <strong>{seat.guestEmail}</strong>
         </p>
-		<Button variant="success" onClick={handleConfirmSeat}>
-			<span
-				className="spinner-border spinner-border-sm mr-2"
-				role="status"
-				aria-hidden="true"
-			></span>
-			Seat Confirming
+        <Button variant="success" onClick={handleConfirmSeat} disabled={isLoading}>
+          {isLoading && (
+            <span
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          )}
+          {isLoading ? " Confirming..." : "Confirm Seat"}
         </Button>
-        </div>
+      </div>
     </div>
   );
 };

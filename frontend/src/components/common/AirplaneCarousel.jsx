@@ -38,21 +38,19 @@ const AirplaneCarousel = () => {
 								{airplanes.slice(index * 4, index * 4 + 4).map((airplane) => (
 									<Col key={airplane.id} className="mb-4" xs={12} md={6} lg={3}>
 										<Card style={{height:"370px"}}>
-											<Link to={`/book-airplane/${airplane.id}`}>
-												<Card.Img
-													variant="top"
-													src={`data:image/png;base64, ${airplane.photo}`}
-													alt="airplane Photo"
-													className="w-100"
-													style={{ maxHeight: "200px" }}
-												/>
-											</Link>
+											<Card.Img
+												variant="top"
+												src={`data:image/png;base64, ${airplane.photo}`}
+												alt="airplane Photo"
+												className="w-100"
+												style={{ maxHeight: "200px" }}
+											/>
 											<Card.Body>
 												<Card.Title className="hotel-color">{airplane.airplaneType}</Card.Title>
 												<Card.Title className="airplane-price">${airplane.ticketPrice}</Card.Title>
-												<div className="flex-shrink-0">
+												<div>
 													<Link to={`/book-airplane/${airplane.id}`} className="btn btn-hotel btn-sm">
-														Book Ticket
+														Book Ticket {console.log(airplane.id)}
 													</Link>
 												</div>
 											</Card.Body>
