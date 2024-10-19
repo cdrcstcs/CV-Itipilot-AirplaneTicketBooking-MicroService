@@ -48,8 +48,8 @@ const NavBar = () => {
 					</ul>
 					<ul className="d-flex navbar-nav">
 						<li className="nav-item">
-							<NavLink className="nav-link" to={"/find-seat"}>
-								Find my seat
+							<NavLink className="nav-link" to={"/find-ticket"}>
+								Find my ticket
 							</NavLink>
 						</li>
 						<li className="nav-item dropdown">

@@ -24,7 +24,7 @@ const DateSlider = ({ onDateChange, onFilterChange }) => {
 	}
 	return (
 		<>
-			<h5>Filter seats by date</h5>
+			<h5>Filter tickets by date</h5>
 			<DateRangePicker ranges={[dateRange]} onChange={handleSelect} className="mb-4" />
 			<button className="btn btn-secondary" onClick={handleClearFilter}>
 				Clear Filter

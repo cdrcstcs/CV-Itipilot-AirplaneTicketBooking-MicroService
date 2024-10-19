@@ -74,47 +74,47 @@ export async function getAirplaneById(airplaneId) {
 		throw new Error(`Error fetching airplane ${error.message}`)
 	}
 }
-export async function bookSeat(airplaneId, seat) {
+export async function bookTicket(airplaneId, ticket) {
 	try {
-		const response = await api.post(`/seats/airplane/${airplaneId}/seat`, seat)
+		const response = await api.post(`/tickets/airplane/${airplaneId}/ticket`, ticket)
 		return response.data
 	} catch (error) {
 		if (error.response && error.response.data) {
 			throw new Error(error.response.data)
 		} else {
-			throw new Error(`Error seat airplane : ${error.message}`)
+			throw new Error(`Error ticket airplane : ${error.message}`)
 		}
 	}
 }
-export async function getAllSeats() {
+export async function getAllTickets() {
 	try {
-		const result = await api.get("/seats/all-seats", {
+		const result = await api.get("/tickets/all-tickets", {
 			headers: getHeader()
 		})
 		console.log(result.data);
 		return result.data
 	} catch (error) {
-		throw new Error(`Error fetching seats : ${error.message}`)
+		throw new Error(`Error fetching tickets : ${error.message}`)
 	}
 }
-export async function getSeatByConfirmationCode(confirmationCode) {
+export async function getTicketByConfirmationCode(confirmationCode) {
 	try {
-		const result = await api.get(`/seats/confirmation/${confirmationCode}`)
+		const result = await api.get(`/tickets/confirmation/${confirmationCode}`)
 		return result.data
 	} catch (error) {
 		if (error.response && error.response.data) {
 			throw new Error(error.response.data)
 		} else {
-			throw new Error(`Error find seat : ${error.message}`)
+			throw new Error(`Error find ticket : ${error.message}`)
 		}
 	}
 }
-export async function cancelSeat(seatId) {
+export async function cancelTicket(ticketId) {
 	try {
-		const result = await api.delete(`/seats/seat/${seatId}/delete`)
+		const result = await api.delete(`/tickets/ticket/${ticketId}/delete`)
 		return result.data
 	} catch (error) {
-		throw new Error(`Error cancelling seat :${error.message}`)
+		throw new Error(`Error cancelling ticket :${error.message}`)
 	}
 }
 export async function getAvailableAirplanes(departureDate, landingDate, airplaneType) {
@@ -179,14 +179,14 @@ export async function getUser(userId, token) {
 		throw error
 	}
 }
-export async function getSeatsByUserId(userId, token) {
+export async function getticketsByUserId(userId, token) {
 	try {
-		const response = await api.get(`/seats/user/${userId}/seats`, {
+		const response = await api.get(`/tickets/user/${userId}/tickets`, {
 			headers: getHeader()
 		})
 		return response.data
 	} catch (error) {
-		console.error("Error fetching seats:", error.message)
-		throw new Error("Failed to fetch seats")
+		console.error("Error fetching tickets:", error.message)
+		throw new Error("Failed to fetch tickets")
 	}
 }

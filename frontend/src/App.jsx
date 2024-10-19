@@ -10,10 +10,10 @@ import NavBar from "./components/layout/NavBar"
 import Footer from "./components/layout/Footer"
 import AirplaneListing from "./components/airplane/AirplaneListing"
 import Admin from "./components/admin/Admin"
-import Checkout from "./components/seat/Checkout"
-import SeatSuccess from "./components/seat/SeatSuccess"
-import Seats from "./components/seat/Seats"
-import FindSeat from "./components/seat/FindSeat"
+import Checkout from "./components/ticket/Checkout"
+import TicketSuccess from "./components/ticket/TicketSuccess"
+import Tickets from "./components/ticket/Tickets"
+import FindTicket from "./components/ticket/FindTicket"
 import Login from "./components/auth/Login"
 import Registration from "./components/auth/Registration"
 import Profile from "./components/auth/Profile"
@@ -40,13 +40,13 @@ function App() {
 						/>
 						<Route path="/browse-all-airplanes" element={<AirplaneListing />} />
 						<Route path="/admin" element={<Admin />} />
-						<Route path="/seat-success" element={<SeatSuccess />} />
-						<Route path="/existing-seats" element={<Seats />} />
-						<Route path="/find-seat" element={<FindSeat />} />
+						<Route path="/ticket-success" element={<TicketSuccess />} />
+						<Route path="/existing-Tickets" element={<Tickets />} />
+						<Route path="/find-ticket" element={<FindTicket />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Registration />} />
 						<Route path="/profile" element={<Profile />} />
-						<Route path="/logout" element={<FindSeat />} />
+						<Route path="/logout" element={<FindTicket />} />
 					</Routes>
 				</Router>
 				<Footer />

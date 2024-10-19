@@ -6,7 +6,7 @@ const Admin = () => {
 			<h2>Welcome to Adimin Panel</h2>
 			<hr />
 			<Link to={"/existing-airplanes"}>Manage Airplanes</Link> <br />
-			<Link to={"/existing-seats"}>Manage Seats</Link>
+			<Link to={"/existing-tickets"}>Manage <Tarea:cr></Tarea:cr>ickets</Link>
 		</section>
 	)
 }
